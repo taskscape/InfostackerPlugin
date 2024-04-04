@@ -72,7 +72,21 @@ export async function createClient(
 		},
 		async createPost(file: TFile) {
 			const title = file.basename;
-			const content = await file.vault.read(file);
+			let content = await file.vault.read(file);
+
+			// Example parsing logic to find attachment references in the content
+			// This needs to be adjusted based on how attachments are referenced
+			const attachmentPaths = this.extractAttachmentPaths(content);
+
+			// Read each attachment and append its content
+			for (const path of attachmentPaths) {
+				const attachmentFile = file.vault.getAbstractFileByPath(path);
+				if (attachmentFile instanceof TFile) {
+					const attachmentContent = await file.vault.read(attachmentFile);
+					// Example way to combine content, can be adjusted as needed
+					content += `\n\nAttachment Content: ${attachmentContent}`;
+				}
+			}
 
 			try {
 				const resp = await obsiusWrapper.createPost(title, content);
@@ -124,6 +138,17 @@ export async function createClient(
 				console.error(e);
 				throw new Error('Failed to delete post');
 			}
+		},
+		// Example method to extract attachment paths from the content
+		// Adjust the logic to match how attachments are referenced in your notes
+		extractAttachmentPaths(content: string): string[] {
+			const paths = [];
+			const regex = /!\[.*?\]\((.*?)\)/g; // Example regex for markdown image links
+			let match;
+			while ((match = regex.exec(content)) !== null) {
+				paths.push(match[1]);
+			}
+			return paths;
 		},
 	};
 }
