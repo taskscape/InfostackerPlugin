@@ -1,7 +1,7 @@
 import http from './http';
 import { TFile } from 'obsidian';
 
-const baseUrl = 'https://obsius.site';
+const baseUrl = 'https://share.taskscape.com';
 
 interface CreateResponse {
 	id: string;
@@ -9,20 +9,14 @@ interface CreateResponse {
 }
 
 const obsiusWrapper = {
-	async createPost(title: string, content: string): Promise<CreateResponse> {
-		return http('POST', `${baseUrl}/`, {title, content});
+	async createPost(formData: FormData): Promise<CreateResponse> {
+		return http('POST', `${baseUrl}/`, formData);
 	},
 	async updatePost(
 		id: string,
-		secret: string,
-		title: string,
-		content: string
+		formData: FormData
 	): Promise<void> {
-		return http('PUT', `${baseUrl}/${id}`, {
-			secret,
-			title,
-			content,
-		});
+		return http('PUT', `${baseUrl}/${id}`, formData);
 	},
 	async deletePost(id: string, secret: string): Promise<void> {
 		return http('DELETE', `${baseUrl}/${id}`, {secret});
@@ -43,11 +37,11 @@ export interface ObsiusClient {
 
 	publishPost(file: TFile): Promise<string | null>;
 
-	createPost(view: TFile): Promise<string>;
+	createPost(id: string, view: FormData): Promise<string>;
 
 	getUrl(view: TFile): string;
 
-	updatePost(view: TFile): Promise<void>;
+	updatePost(view: FormData): Promise<void>;
 
 	deletePost(view: TFile): Promise<void>;
 }
@@ -78,18 +72,19 @@ export async function createClient(
 			// This needs to be adjusted based on how attachments are referenced
 			const attachmentPaths = this.extractAttachmentPaths(content);
 
-			// Read each attachment and append its content
-			for (const path of attachmentPaths) {
+			// Prepare formData for multipart/form-data submission
+			const formData = new FormData();
+			formData.append('title', title);
+			formData.append('content', content);
+			attachmentPaths.forEach((path) => {
 				const attachmentFile = file.vault.getAbstractFileByPath(path);
 				if (attachmentFile instanceof TFile) {
-					const attachmentContent = await file.vault.read(attachmentFile);
-					// Example way to combine content, can be adjusted as needed
-					content += `\n\nAttachment Content: ${attachmentContent}`;
+					formData.append('files[]', attachmentFile);
 				}
-			}
+			});
 
 			try {
-				const resp = await obsiusWrapper.createPost(title, content);
+				const resp = await obsiusWrapper.createPost(formData); // Adjusted to pass formData directly
 				data.posts[file.path] = {
 					id: resp.id,
 					secret: resp.secret,
@@ -115,12 +110,25 @@ export async function createClient(
 			const title = file.basename;
 			const content = await file.vault.read(file);
 
+			const formData = new FormData();
+			formData.append('secret', post.secret);
+			formData.append('title', title);
+			formData.append('content', content);
+
+			// Example parsing logic to find attachment references in the content
+			// This needs to be adjusted based on how attachments are referenced
+			const attachmentPaths = this.extractAttachmentPaths(content);
+			attachmentPaths.forEach((path) => {
+				const attachmentFile = file.vault.getAbstractFileByPath(path);
+				if (attachmentFile instanceof TFile) {
+					formData.append('files[]', attachmentFile);
+				}
+			});
+
 			try {
 				await obsiusWrapper.updatePost(
 					post.id,
-					post.secret,
-					title,
-					content
+					formData
 				);
 			} catch (e) {
 				console.error(e);
