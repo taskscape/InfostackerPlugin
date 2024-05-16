@@ -1,83 +1,72 @@
-# Obsius Publish
+# Obsidian Note Publish Plugin Documentation
 
-<p style="font-size:1.5em"><em>Easily publish notes to the web</em></p>
+## Overview
 
-This plugin integrates with [obsius.site](https://obsius.site) to publish markdown notes on the web.
+The Obsidian Note Publish plugin enables users to send notes to a server, edit them, and delete them directly within the Obsidian program. Additionally, it allows users to share notes with others via a generated link. The plugin supports attachments, and users with the link can view the note along with its attachments in HTML format.
 
-# Limitations
+## Installation
 
-The type of content possible to render is subject to some limitations. For the moment, only plain text and simple styling is supported.
+### Prerequisites
 
-# Instructions
+- [Obsidian](https://obsidian.md/) installed on your system.
+- Access to your Obsidian vault.
 
-## Publishing a new note
+### Steps
 
-Right-click a note in the browser and click "Publish to Obsius".
+1. Download the repository of the plugin.
+2. Open Obsidian.
+3. Open or create a vault where you want to install the plugin.
+4. Navigate to Settings and select "Community Plugins".
+5. Enable "Turn on community plugins".
+6. Go to the local path of your Obsidian vault (e.g., TesterVault/.obsidian).
+7. If it doesn't exist, create a folder named "plugins" and enter it.
+8. Copy the downloaded plugin folder and paste it into the "plugins" folder.
+9. Open the folder containing the plugin files using a code editor (Visual Studio Code is recommended).
+10. In `taskSync.ts`, modify the `baseUrl` (line 4) to the URL of the server that will receive requests.
+11. Open the terminal and run `npm install` in the root directory of the plugin (where this readme is located).
+12. After successful installation, run `npm run dev` in the terminal.
+13. Switch back to Obsidian, press `Ctrl+P`, and type "reload".
+14. Select "Reload app without saving".
+15. Open the Settings again and go to the "Community plugins" tab.
+16. In the "Installed plugins" section, "Taskscape’s Note Publish" should appear. Enable it using the radio button.
 
-![Right-click a note in the browser and click "Publish to Obsius".](media/file-publish.jpg)
+## Usage
 
-Or use the editor menu.
+### Publishing a Note
 
-![Open the editor menu and click "Publish to Obsius"](media/file-menu-publish.jpg)
+1. Write or open the note you want to publish.
+2. Use the plugin interface to send the note to the server.
+![Menu interface: ](media/file-menu-publish.jpg)
+3. Once published, a link will be generated for sharing.
 
-Or the command palette.
+### Editing a Note
 
-![Search for "Publish to Obsius" in the command palette](media/command-publish.jpg)
+1. Open the published note in Obsidian.
+2. Make the necessary edits.
+3. Use the plugin interface to update the note on the server.
+![Menu interface: ](media/file-menu-update.jpg)
 
-The published note's public URL will be automatically copied to your clipboard. The link is also available for copying later, [see below](#getting-the-public-url)
+### Deleting a Note
 
-## Updating a published note
+1. Open the published note in Obsidian.
+2. Use the plugin interface to delete the note from the server.
+![Menu interface: ](media/file-menu-remove.jpg)
 
-Right-click the note in the browser and click "Update in Obsius".
+### Sharing a Note
 
-![Right-click the note in the browser and click "Update in Obsius".](media/file-update.jpg)
+1. Copy the generated link from the plugin interface.
+![Menu interface: ](media/file-menu-copy-url.jpg)
+2. Share the link with others.
+3. Recipients can view the note and its attachments in HTML format using the provided link.
 
-Or use the editor menu.
+## Configuration
 
-![Open the editor menu and click "Update in Obsius"](media/file-menu-update.jpg)
+- `baseUrl`: Specify the URL of the server where requests will be sent. Ensure this is correctly configured for the plugin to function properly.
 
-Or the command palette.
+## Troubleshooting
 
-![Search for "Update in Obsius" in the command palette](media/command-update.jpg)
+If you encounter any issues during installation or usage, refer to the plugin's documentation or reach out to the plugin developer for assistance.
 
-## Getting the public URL
+---
 
-Right-click the note in the browser and click "Copy Obsius URL".
-
-![Right-click the note in the browser and click "Copy Obsius URL".](media/file-copy-url.jpg)
-
-Or use the editor menu.
-
-![Open the editor menu and click "Copy Obsius URL"](media/file-menu-copy-url.jpg)
-
-Or the command palette.
-
-![Search for "Copy Obsius URL" in the command palette](media/command-copy-url.jpg)
-
-## Deleting the note
-
-Right-click the note in the browser and click "Remove from Obsius".
-
-![Right-click the note in the browser and click "Remove from Obsius".](media/file-remove.jpg)
-
-Or use the editor menu.
-
-![Open the editor menu and click "Remove from Obsius"](media/file-menu-remove.jpg)
-
-Or the command palette.
-
-![Search for "Remove from Obsius" in the command palette](media/command-remove.jpg)
-
-**NOTE:** It may take a little while before the note becomes unavailable due to caching.
-
-## View published notes
-
-Use the command "View published posts" from the command palette to view a list of published notes.
-
-![Search for "View published posts" in the command palette](media/command-list-posts.jpg)
-
-# Example
-
-An example page can be viewed here: [https://obsius.site/0m593p6z1h233y18714m](https://obsius.site/0m593p6z1h233y18714m)
-
-![Example page preview](media/example-page.png)
+This documentation provides a comprehensive guide to installing, configuring, and using the Obsidian Note Publish plugin. If you have any further questions or require additional support, feel free to consult the plugin documentation or contact the plugin developer.

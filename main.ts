@@ -1,14 +1,14 @@
 import { Notice, Plugin, TFile } from 'obsidian';
-import type { ObsiusClient } from './src/obsius';
-import { createClient } from './src/obsius';
+import type { TaskSyncClient } from './src/taskSync';
+import { createClient } from './src/taskSync';
 import { getText } from './src/text';
 import { PublishedPostsModal } from './src/modals';
 
-export default class ObsiusPlugin extends Plugin {
-	obsiusClient: ObsiusClient;
+export default class TaskSyncPlugin extends Plugin {
+	TaskSyncClient: TaskSyncClient;
 
 	async onload() {
-		this.obsiusClient = await createClient(
+		this.TaskSyncClient = await createClient(
 			async () => ({
 				posts: {},
 				...(await this.loadData()),
@@ -16,55 +16,55 @@ export default class ObsiusPlugin extends Plugin {
 			async (data) => await this.saveData(data)
 		);
 
-		this.addObsiusCommands()
+		this.addTaskSyncCommands()
 		this.registerFileMenuEvent()
 	}
 
 	onunload() {
 	}
 
-	addObsiusCommands(){
+	addTaskSyncCommands(){
 		this.addCommand({
-			id: 'obsius.action.listPosts',
+			id: 'tasksync.action.listPosts',
 			name: getText('actions.listPosts.name'),
 			callback: () => this.showPublishedPosts(),
 		})
 		this.addCommand({
-			id: 'obsius.action.create',
+			id: 'tasksync.action.create',
 			name: getText('actions.create.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
-					return !this.obsiusClient.getUrl(view.file)
+					return !this.TaskSyncClient.getUrl(view.file)
 				}
 				this.publishFile(view.file)
 			}
 		})
 		this.addCommand({
-			id: 'obsius.action.update',
+			id: 'tasksync.action.update',
 			name: getText('actions.update.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
-					return !!this.obsiusClient.getUrl(view.file)
+					return !!this.TaskSyncClient.getUrl(view.file)
 				}
 				this.updateFile(view.file)
 			}
 		})
 		this.addCommand({
-			id: 'obsius.action.copyUrl',
+			id: 'tasksync.action.copyUrl',
 			name: getText('actions.copyUrl.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
-					return !!this.obsiusClient.getUrl(view.file)
+					return !!this.TaskSyncClient.getUrl(view.file)
 				}
 				this.copyUrl(view.file)
 			}
 		})
 		this.addCommand({
-			id: 'obsius.action.remove',
+			id: 'tasksync.action.remove',
 			name: getText('actions.remove.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
-					return !!this.obsiusClient.getUrl(view.file)
+					return !!this.TaskSyncClient.getUrl(view.file)
 				}
 				this.deleteFile(view.file)
 			}
@@ -76,7 +76,7 @@ export default class ObsiusPlugin extends Plugin {
 			this.app.workspace.on('file-menu', (menu, file) => {
 				if (file instanceof TFile) {
 					menu.addSeparator();
-					if (!this.obsiusClient.getUrl(file)) {
+					if (!this.TaskSyncClient.getUrl(file)) {
 						menu
 							.addItem(item => item
 								.setTitle(getText('actions.create.name'))
@@ -108,12 +108,12 @@ export default class ObsiusPlugin extends Plugin {
 	}
 
 	showPublishedPosts(){
-		new PublishedPostsModal(this.app, this.obsiusClient).open();
+		new PublishedPostsModal(this.app, this.TaskSyncClient).open();
 	}
 
 	async publishFile(file: TFile){
 		try {
-			const url = await this.obsiusClient.createPost(file);
+			const url = await this.TaskSyncClient.createPost(file);
 			await navigator.clipboard.writeText(url);
 			new Notice(getText('actions.create.success'));
 		} catch (e) {
@@ -124,7 +124,7 @@ export default class ObsiusPlugin extends Plugin {
 
 	async updateFile(file: TFile){
 		try {
-			await this.obsiusClient.updatePost(file);
+			await this.TaskSyncClient.updatePost(file);
 			new Notice(getText('actions.update.success'));
 		} catch (e) {
 			console.error(e);
@@ -133,7 +133,7 @@ export default class ObsiusPlugin extends Plugin {
 	}
 
 	async copyUrl(file: TFile){
-		const url = this.obsiusClient.getUrl(file);
+		const url = this.TaskSyncClient.getUrl(file);
 		if (url) {
 			await navigator.clipboard.writeText(url);
 			new Notice(getText('actions.copyUrl.success'));
@@ -144,7 +144,7 @@ export default class ObsiusPlugin extends Plugin {
 
 	async deleteFile(file: TFile){
 		try {
-			await this.obsiusClient.deletePost(file);
+			await this.TaskSyncClient.deletePost(file);
 			new Notice(getText('actions.remove.success'));
 		} catch (e) {
 			console.error(e);

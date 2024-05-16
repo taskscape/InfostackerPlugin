@@ -1,16 +1,16 @@
 import { App, Modal, setIcon, TFile } from 'obsidian';
 import { getText } from './text';
-import { ObsiusClient } from './obsius';
+import { TaskSyncClient } from './taskSync';
 
 export class PublishedPostsModal extends Modal {
-	constructor(app: App, private obsiusClient: ObsiusClient) {
+	constructor(app: App, private TaskSyncClient: TaskSyncClient) {
 		super(app);
 	}
 
 	onOpen() {
 		this.contentEl.createEl('h1', {text: getText('actions.listPosts.title')});
 
-		for (const [path] of Object.entries(this.obsiusClient.data().posts)) {
+		for (const [path] of Object.entries(this.TaskSyncClient.data().posts)) {
 			const file = app.vault.getAbstractFileByPath(path);
 			if (!(file instanceof TFile)) {
 				continue;
@@ -33,7 +33,7 @@ export class PublishedPostsModal extends Modal {
 
 			const webLink = buttonContainer.createEl('a',{
 				cls: 'hidden',
-				href: this.obsiusClient.getUrl(file),
+				href: this.TaskSyncClient.getUrl(file),
 			});
 
 			const showPost = buttonContainer.createEl('button');

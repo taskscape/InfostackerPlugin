@@ -18,27 +18,27 @@ function flatten(obj: Record<string, any>) {
 };
 
 const strings = flatten({
-	serviceName: 'Obsius',
+	serviceName: 'Taskscape note manager',
 	actions: {
 		create: {
-			name: 'Publish to Obsius',
-			success: 'Note published to Obsius. URL copied to clipboard.',
-			failure: 'Failed to publish note to Obsius'
+			name: 'Publish to Taskscape',
+			success: 'Note published to Taskscape. URL copied to clipboard.',
+			failure: 'Failed to publish note to Taskscape'
 		},
 		update: {
-			name: 'Update in Obsius',
-			success: 'Updated note in Obsius. It may take a little while before update becomes visible.',
-			failure: 'Failed to update note in Obsius'
+			name: 'Update in Taskscape',
+			success: 'Updated note in Taskscape. It may take a little while before update becomes visible.',
+			failure: 'Failed to update note in Taskscape'
 		},
 		copyUrl: {
-			name: 'Copy Obsius URL',
-			success: 'Obsius URL copied to clipboard',
+			name: 'Copy Taskscape\'s note URL',
+			success: 'Taskscape\'s note URL copied to clipboard',
 			failure: 'Note not yet published'
 		},
 		remove: {
-			name: 'Remove from Obsius',
-			success: 'Note removed from Obsius',
-			failure: 'Failed to remove note form Obsius'
+			name: 'Remove from Taskscape',
+			success: 'Note removed from Taskscape',
+			failure: 'Failed to remove note form Taskscape'
 		},
 		listPosts: {
 			name: 'View published posts',
