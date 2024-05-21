@@ -1,6 +1,6 @@
 import { TFile } from 'obsidian';
 
-const baseUrl = 'https://share.infostacker.com';
+const baseUrl = 'https://share.taskscape.com';
 
 interface CreateResponse {
 	id: string;
