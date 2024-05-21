@@ -11,7 +11,7 @@ The Infostacker Note Publish plugin enables users to send notes to a server, edi
 - [Obsidian](https://obsidian.md/) installed on your system.
 - Access to your Obsidian vault.
 
-### Steps
+### How to modify
 
 1. Download the repository of the plugin.
 2. Open Obsidian.
@@ -29,6 +29,9 @@ The Infostacker Note Publish plugin enables users to send notes to a server, edi
 14. Select "Reload app without saving".
 15. Open the Settings again and go to the "Community plugins" tab.
 16. In the "Installed plugins" section, "Infostacker Note Publish" should appear. Enable it using the radio button.
+
+### Manually installing the plugin
+- Copy over `main.js`, `styles.css`, `manifest.json` to your vault VaultFolder/.obsidian/plugins/infostacker-note-publish/.
 
 ## Usage
 
