@@ -1,16 +1,16 @@
 import { App, Modal, setIcon, TFile } from 'obsidian';
 import { getText } from './text';
-import { TaskSyncClient } from './taskSync';
+import { InfostackerClient } from './infostacker';
 
 export class PublishedPostsModal extends Modal {
-	constructor(app: App, private TaskSyncClient: TaskSyncClient) {
+	constructor(app: App, private InfostackerClient: InfostackerClient) {
 		super(app);
 	}
 
 	onOpen() {
 		this.contentEl.createEl('h1', {text: getText('actions.listPosts.title')});
 
-		for (const [path] of Object.entries(this.TaskSyncClient.data().posts)) {
+		for (const [path] of Object.entries(this.InfostackerClient.data().posts)) {
 			const file = app.vault.getAbstractFileByPath(path);
 			if (!(file instanceof TFile)) {
 				continue;
@@ -33,7 +33,7 @@ export class PublishedPostsModal extends Modal {
 
 			const webLink = buttonContainer.createEl('a',{
 				cls: 'hidden',
-				href: this.TaskSyncClient.getUrl(file),
+				href: this.InfostackerClient.getUrl(file),
 			});
 
 			const showPost = buttonContainer.createEl('button');

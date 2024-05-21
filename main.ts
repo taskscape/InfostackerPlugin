@@ -1,14 +1,14 @@
 import { Notice, Plugin, TFile } from 'obsidian';
-import type { TaskSyncClient } from './src/taskSync';
-import { createClient } from './src/taskSync';
+import type { InfostackerClient } from './src/infostacker';
+import { createClient } from './src/infostacker';
 import { getText } from './src/text';
 import { PublishedPostsModal } from './src/modals';
 
-export default class TaskSyncPlugin extends Plugin {
-	TaskSyncClient: TaskSyncClient;
+export default class InfostackerPlugin extends Plugin {
+	InfostackerClient: InfostackerClient;
 
 	async onload() {
-		this.TaskSyncClient = await createClient(
+		this.InfostackerClient = await createClient(
 			async () => ({
 				posts: {},
 				...(await this.loadData()),
@@ -16,55 +16,55 @@ export default class TaskSyncPlugin extends Plugin {
 			async (data) => await this.saveData(data)
 		);
 
-		this.addTaskSyncCommands()
+		this.addInfostackerCommands()
 		this.registerFileMenuEvent()
 	}
 
 	onunload() {
 	}
 
-	addTaskSyncCommands(){
+	addInfostackerCommands(){
 		this.addCommand({
-			id: 'tasksync.action.listPosts',
+			id: 'infostacker.action.listPosts',
 			name: getText('actions.listPosts.name'),
 			callback: () => this.showPublishedPosts(),
 		})
 		this.addCommand({
-			id: 'tasksync.action.create',
+			id: 'infostacker.action.create',
 			name: getText('actions.create.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
-					return !this.TaskSyncClient.getUrl(view.file)
+					return !this.InfostackerClient.getUrl(view.file)
 				}
 				this.publishFile(view.file)
 			}
 		})
 		this.addCommand({
-			id: 'tasksync.action.update',
+			id: 'infostacker.action.update',
 			name: getText('actions.update.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
-					return !!this.TaskSyncClient.getUrl(view.file)
+					return !!this.InfostackerClient.getUrl(view.file)
 				}
 				this.updateFile(view.file)
 			}
 		})
 		this.addCommand({
-			id: 'tasksync.action.copyUrl',
+			id: 'infostacker.action.copyUrl',
 			name: getText('actions.copyUrl.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
-					return !!this.TaskSyncClient.getUrl(view.file)
+					return !!this.InfostackerClient.getUrl(view.file)
 				}
 				this.copyUrl(view.file)
 			}
 		})
 		this.addCommand({
-			id: 'tasksync.action.remove',
+			id: 'infostacker.action.remove',
 			name: getText('actions.remove.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
-					return !!this.TaskSyncClient.getUrl(view.file)
+					return !!this.InfostackerClient.getUrl(view.file)
 				}
 				this.deleteFile(view.file)
 			}
@@ -76,7 +76,7 @@ export default class TaskSyncPlugin extends Plugin {
 			this.app.workspace.on('file-menu', (menu, file) => {
 				if (file instanceof TFile) {
 					menu.addSeparator();
-					if (!this.TaskSyncClient.getUrl(file)) {
+					if (!this.InfostackerClient.getUrl(file)) {
 						menu
 							.addItem(item => item
 								.setTitle(getText('actions.create.name'))
@@ -108,12 +108,12 @@ export default class TaskSyncPlugin extends Plugin {
 	}
 
 	showPublishedPosts(){
-		new PublishedPostsModal(this.app, this.TaskSyncClient).open();
+		new PublishedPostsModal(this.app, this.InfostackerClient).open();
 	}
 
 	async publishFile(file: TFile){
 		try {
-			const url = await this.TaskSyncClient.createPost(file);
+			const url = await this.InfostackerClient.createPost(file);
 			await navigator.clipboard.writeText(url);
 			new Notice(getText('actions.create.success'));
 		} catch (e) {
@@ -124,7 +124,7 @@ export default class TaskSyncPlugin extends Plugin {
 
 	async updateFile(file: TFile){
 		try {
-			await this.TaskSyncClient.updatePost(file);
+			await this.InfostackerClient.updatePost(file);
 			new Notice(getText('actions.update.success'));
 		} catch (e) {
 			console.error(e);
@@ -133,7 +133,7 @@ export default class TaskSyncPlugin extends Plugin {
 	}
 
 	async copyUrl(file: TFile){
-		const url = this.TaskSyncClient.getUrl(file);
+		const url = this.InfostackerClient.getUrl(file);
 		if (url) {
 			await navigator.clipboard.writeText(url);
 			new Notice(getText('actions.copyUrl.success'));
@@ -144,7 +144,7 @@ export default class TaskSyncPlugin extends Plugin {
 
 	async deleteFile(file: TFile){
 		try {
-			await this.TaskSyncClient.deletePost(file);
+			await this.InfostackerClient.deletePost(file);
 			new Notice(getText('actions.remove.success'));
 		} catch (e) {
 			console.error(e);

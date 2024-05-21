@@ -18,27 +18,27 @@ function flatten(obj: Record<string, any>) {
 };
 
 const strings = flatten({
-	serviceName: 'Taskscape note manager',
+	serviceName: 'Infostacker note manager',
 	actions: {
 		create: {
-			name: 'Publish to Taskscape',
-			success: 'Note published to Taskscape. URL copied to clipboard.',
-			failure: 'Failed to publish note to Taskscape'
+			name: 'Publish to Infostacker',
+			success: 'Note published to Infostacker. URL copied to clipboard.',
+			failure: 'Failed to publish note to Infostacker'
 		},
 		update: {
-			name: 'Update in Taskscape',
-			success: 'Updated note in Taskscape. It may take a little while before update becomes visible.',
-			failure: 'Failed to update note in Taskscape'
+			name: 'Update in Infostacker',
+			success: 'Updated note in Infostacker. It may take a little while before update becomes visible.',
+			failure: 'Failed to update note in Infostacker'
 		},
 		copyUrl: {
-			name: 'Copy Taskscape\'s note URL',
-			success: 'Taskscape\'s note URL copied to clipboard',
+			name: 'Copy Infostacker\'s note URL',
+			success: 'Infostacker\'s note URL copied to clipboard',
 			failure: 'Note not yet published'
 		},
 		remove: {
-			name: 'Remove from Taskscape',
-			success: 'Note removed from Taskscape',
-			failure: 'Failed to remove note form Taskscape'
+			name: 'Remove from Infostacker',
+			success: 'Note removed from Infostacker',
+			failure: 'Failed to remove note form Infostacker'
 		},
 		listPosts: {
 			name: 'View published posts',

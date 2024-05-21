@@ -1,13 +1,13 @@
 import { TFile } from 'obsidian';
 
-const baseUrl = 'https://shr.taskscape.com';
+const baseUrl = 'https://share.infostacker.com';
 
 interface CreateResponse {
 	id: string;
 	secret: string;
 }
 
-const taskSyncWrapper = {
+const infostackerWrapper = {
 	async createPost(formData: FormData): Promise<CreateResponse> {
 		
 		var fetched = fetch(`${baseUrl}/Sharing/UploadMarkdownWithFiles`, {
@@ -72,7 +72,7 @@ export interface Data {
 	posts: Record<string, Post>;
 }
 
-export interface TaskSyncClient {
+export interface InfostackerClient {
 	data(): Data;
 
 	publishPost(file: TFile): Promise<string | null>;
@@ -91,7 +91,7 @@ export interface TaskSyncClient {
 export async function createClient(
 	loadData: () => Promise<Data>,
 	saveData: (data: Data) => Promise<void>
-): Promise<TaskSyncClient> {
+): Promise<InfostackerClient> {
 	const data = await loadData();
 
 	return {
@@ -130,7 +130,7 @@ export async function createClient(
 			}
 			
 			try {
-				const resp = await taskSyncWrapper.createPost(formData);
+				const resp = await infostackerWrapper.createPost(formData);
 				data.posts[file.path] = {
 					id: resp.id,
 					secret: resp.secret,
@@ -180,7 +180,7 @@ export async function createClient(
 			}
 
 			try {
-				await taskSyncWrapper.updatePost(
+				await infostackerWrapper.updatePost(
 					post.id,
 					formData
 				);
@@ -197,7 +197,7 @@ export async function createClient(
 			formData.append('secret', post.secret);
 
 			try {
-				await taskSyncWrapper.deletePost(post.id, formData);
+				await infostackerWrapper.deletePost(post.id, formData);
 				delete data.posts[file.path];
 				await saveData(data);
 			} catch (e) {

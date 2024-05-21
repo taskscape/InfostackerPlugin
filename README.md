@@ -1,8 +1,8 @@
-# Obsidian Note Publish Plugin Documentation
+# Infostacker Note Publish Plugin Documentation
 
 ## Overview
 
-The Obsidian Note Publish plugin enables users to send notes to a server, edit them, and delete them directly within the Obsidian program. Additionally, it allows users to share notes with others via a generated link. The plugin supports attachments, and users with the link can view the note along with its attachments in HTML format.
+The Infostacker Note Publish plugin enables users to send notes to a server, edit them, and delete them directly within the Obsidian program. Additionally, it allows users to share notes with others via a generated link. The plugin supports attachments, and users with the link can view the note along with its attachments in HTML format.
 
 ## Installation
 
@@ -22,13 +22,13 @@ The Obsidian Note Publish plugin enables users to send notes to a server, edit t
 7. If it doesn't exist, create a folder named "plugins" and enter it.
 8. Copy the downloaded plugin folder and paste it into the "plugins" folder.
 9. Open the folder containing the plugin files using a code editor (Visual Studio Code is recommended).
-10. In `taskSync.ts`, modify the `baseUrl` (line 4) to the URL of the server that will receive requests.
+10. In `infostacker.ts`, modify the `baseUrl` (line 4) to the URL of the server that will receive requests.
 11. Open the terminal and run `npm install` in the root directory of the plugin (where this readme is located).
 12. After successful installation, run `npm run dev` in the terminal.
 13. Switch back to Obsidian, press `Ctrl+P`, and type "reload".
 14. Select "Reload app without saving".
 15. Open the Settings again and go to the "Community plugins" tab.
-16. In the "Installed plugins" section, "Taskscape’s Note Publish" should appear. Enable it using the radio button.
+16. In the "Installed plugins" section, "Infostacker Note Publish" should appear. Enable it using the radio button.
 
 ## Usage
 
@@ -69,4 +69,4 @@ If you encounter any issues during installation or usage, refer to the plugin's 
 
 ---
 
-This documentation provides a comprehensive guide to installing, configuring, and using the Obsidian Note Publish plugin. If you have any further questions or require additional support, feel free to consult the plugin documentation or contact the plugin developer.
+This documentation provides a comprehensive guide to installing, configuring, and using the Infostacker Note Publish plugin. If you have any further questions or require additional support, feel free to consult the plugin documentation or contact the plugin developer.
