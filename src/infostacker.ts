@@ -22,7 +22,6 @@ const infostackerWrapper = {
 	
 			return await resp.json();
 		});
-		console.log("Fetch ",fetched);
 		return fetched;
 	},
 	async updatePost(
@@ -42,7 +41,6 @@ const infostackerWrapper = {
 	
 			return await resp.json();
 		});
-		console.log("Fetch: ",fetched);
 		return fetched;
 	},
 	async deletePost(id: string, formData: FormData): Promise<void> {
@@ -58,7 +56,6 @@ const infostackerWrapper = {
 	
 			return await resp.json();
 		});
-		console.log("Removed: ", removed);
 		return removed;
 	},
 };
@@ -152,7 +149,6 @@ export async function createClient(
 					secret: resp.secret,
 				};
 				await saveData(data);
-				console.log("Response: ", resp);
 
 				return `${baseUrl}/Sharing/${resp.id}`;
 			} catch (e) {
@@ -175,8 +171,7 @@ export async function createClient(
     		const content = await file.vault.read(file);
     		const attachmentPaths = this.extractAttachmentPaths(content);
     		const formData = new FormData();
-
-			console.log ("Title: ",title)
+			
 			formData.append('title', title);
 			formData.append('markdown', content);
 			formData.append('secret', post.secret)
