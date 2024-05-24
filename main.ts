@@ -25,12 +25,12 @@ export default class InfostackerPlugin extends Plugin {
 
 	addInfostackerCommands(){
 		this.addCommand({
-			id: 'infostacker.action.listPosts',
+			id: 'action.listPosts',
 			name: getText('actions.listPosts.name'),
 			callback: () => this.showPublishedPosts(),
 		})
 		this.addCommand({
-			id: 'infostacker.action.create',
+			id: 'action.create',
 			name: getText('actions.create.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
@@ -40,7 +40,7 @@ export default class InfostackerPlugin extends Plugin {
 			}
 		})
 		this.addCommand({
-			id: 'infostacker.action.update',
+			id: 'action.update',
 			name: getText('actions.update.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
@@ -50,7 +50,7 @@ export default class InfostackerPlugin extends Plugin {
 			}
 		})
 		this.addCommand({
-			id: 'infostacker.action.copyUrl',
+			id: 'action.copyUrl',
 			name: getText('actions.copyUrl.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
@@ -60,7 +60,7 @@ export default class InfostackerPlugin extends Plugin {
 			}
 		})
 		this.addCommand({
-			id: 'infostacker.action.remove',
+			id: 'action.remove',
 			name: getText('actions.remove.name'),
 			editorCheckCallback: (checking, _, view) => {
 				if (checking){
