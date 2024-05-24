@@ -74,7 +74,7 @@ export default class InfostackerPlugin extends Plugin {
 	registerFileMenuEvent(){
 		this.registerEvent(
 			this.app.workspace.on('file-menu', (menu, file) => {
-				if (file instanceof TFile) {
+				if (file instanceof TFile && file.extension === 'md') {
 					menu.addSeparator();
 					if (!this.InfostackerClient.getUrl(file)) {
 						menu
