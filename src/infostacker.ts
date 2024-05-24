@@ -1,4 +1,4 @@
-import { TFile } from 'obsidian';
+import { TFile, TFolder } from 'obsidian';
 
 const baseUrl = 'https://shr.taskscape.com';
 
@@ -112,11 +112,27 @@ export async function createClient(
 			const content = await file.vault.read(file);
 			const attachmentPaths = this.extractAttachmentPaths(content);
 			const formData = new FormData();
-
 			formData.append('markdown', content);
-
+			const findFileInSubdirectories = async (vault: any, filename: string) => {
+				const searchInDirectory = async (directory: any): Promise<TFile | null> => {
+					for (const child of directory.children) {
+						if (child instanceof TFile && child.name === filename) {
+							return child;
+						} else if (child instanceof TFolder) {
+							const result = await searchInDirectory(child);
+							if (result) return result;
+						}
+					}
+					return null;
+				};
+				return await searchInDirectory(vault.getRoot());
+			};
 			for (const path of attachmentPaths) {
-				const attachmentFile = file.vault.getAbstractFileByPath(path);
+				let attachmentFile = file.vault.getAbstractFileByPath(path);
+				if (!(attachmentFile instanceof TFile)) {
+					const filename = path.split('/').pop();
+					attachmentFile = await findFileInSubdirectories(file.vault, filename);
+				}
 				if (attachmentFile instanceof TFile) {
 					try {
 						const attachmentContent = await attachmentFile.vault.readBinary(attachmentFile);
@@ -136,7 +152,7 @@ export async function createClient(
 					secret: resp.secret,
 				};
 				await saveData(data);
-				console.log("Response: ",resp);
+				console.log("Response: ", resp);
 
 				return `${baseUrl}/Sharing/${resp.id}`;
 			} catch (e) {
@@ -163,10 +179,28 @@ export async function createClient(
 			console.log ("Title: ",title)
 			formData.append('title', title);
 			formData.append('markdown', content);
-			formData.append('secret',post.secret)
+			formData.append('secret', post.secret)
 
+			const findFileInSubdirectories = async (vault: any, filename: string) => {
+				const searchInDirectory = async (directory: any): Promise<TFile | null> => {
+					for (const child of directory.children) {
+						if (child instanceof TFile && child.name === filename) {
+							return child;
+						} else if (child instanceof TFolder) {
+							const result = await searchInDirectory(child);
+							if (result) return result;
+						}
+					}
+					return null;
+				};
+				return await searchInDirectory(vault.getRoot());
+			};
 			for (const path of attachmentPaths) {
-				const attachmentFile = file.vault.getAbstractFileByPath(path);
+				let attachmentFile = file.vault.getAbstractFileByPath(path);
+				if (!(attachmentFile instanceof TFile)) {
+					const filename = path.split('/').pop();
+					attachmentFile = await findFileInSubdirectories(file.vault, filename);
+				}
 				if (attachmentFile instanceof TFile) {
 					try {
 						const attachmentContent = await attachmentFile.vault.readBinary(attachmentFile);
