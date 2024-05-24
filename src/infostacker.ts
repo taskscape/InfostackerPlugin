@@ -10,7 +10,7 @@ interface CreateResponse {
 const infostackerWrapper = {
 	async createPost(formData: FormData): Promise<CreateResponse> {
 		
-		var fetched = fetch(`${baseUrl}/Sharing/UploadMarkdownWithFiles`, {
+		const fetched = fetch(`${baseUrl}/Sharing/UploadMarkdownWithFiles`, {
 			method: 'POST',
 			body: formData
 		}).then(async (resp) => {
@@ -30,7 +30,7 @@ const infostackerWrapper = {
 		formData: FormData
 	): Promise<void> {
 
-		var fetched = fetch(`${baseUrl}/Sharing/${id}`, {
+		const fetched = fetch(`${baseUrl}/Sharing/${id}`, {
 			method: 'PUT',
 			body: formData
 		}).then(async (resp) => {
@@ -46,7 +46,7 @@ const infostackerWrapper = {
 		return fetched;
 	},
 	async deletePost(id: string, formData: FormData): Promise<void> {
-		var removed = fetch(`${baseUrl}/Sharing/${id}`, {
+		const removed = fetch(`${baseUrl}/Sharing/${id}`, {
 			method: 'DELETE',
 			body: formData
 		}).then(async (resp) => {
