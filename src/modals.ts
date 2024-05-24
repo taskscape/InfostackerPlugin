@@ -5,13 +5,14 @@ import { InfostackerClient } from './infostacker';
 export class PublishedPostsModal extends Modal {
 	constructor(app: App, private InfostackerClient: InfostackerClient) {
 		super(app);
+		this.app = app;
 	}
 
 	onOpen() {
 		this.contentEl.createEl('h1', {text: getText('actions.listPosts.title')});
 
 		for (const [path] of Object.entries(this.InfostackerClient.data().posts)) {
-			const file = app.vault.getAbstractFileByPath(path);
+			const file = this.app.vault.getAbstractFileByPath(path);
 			if (!(file instanceof TFile)) {
 				continue;
 			}
@@ -27,7 +28,7 @@ export class PublishedPostsModal extends Modal {
 				title: getText('actions.listPosts.showFile'),
 			});
 			showFile.addEventListener('click', () =>
-				app.workspace.openLinkText(path, path)
+				this.app.workspace.openLinkText(path, path)
 					.then(() => this.close()));
 			setIcon(showFile, 'file-text');
 
