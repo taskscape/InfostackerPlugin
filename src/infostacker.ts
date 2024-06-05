@@ -1,6 +1,7 @@
-import { TFile, TFolder } from 'obsidian';
+import { TFile, TFolder, requestUrl } from 'obsidian';
+import  formDataToString from 'src/helpers';
 
-const baseUrl = 'https://shr.taskscape.com';
+const baseUrl = 'http://shr.taskscape.com';
 
 interface CreateResponse {
 	id: string;
@@ -9,54 +10,37 @@ interface CreateResponse {
 
 const infostackerWrapper = {
 	async createPost(formData: FormData): Promise<CreateResponse> {
-		
-		const fetched = fetch(`${baseUrl}/Sharing/UploadMarkdownWithFiles`, {
-			method: 'POST',
-			body: formData
-		}).then(async (resp) => {
-			if (!resp.ok) {
-				throw new Error(
-					`Request failed: ${resp.status} - ${await resp.text()}`
-				);
-			}
-	
-			return await resp.json();
-		});
-		return fetched;
-	},
-	async updatePost(
-		id: string,
-		formData: FormData
-	): Promise<void> {
+		const boundary = "----formdata-boundary";// + (Math.random() + 1).toString(36).substring(7);
+		const response = await requestUrl({
+			url: `${baseUrl}/Sharing/UploadMarkdownWithFiles`,
+			method: `POST`,
+			contentType: `multipart/form-data; boundary=${boundary}`,
+			body: await formDataToString(formData),
+			throw: false
+		})
+		return response.json;
 
-		const fetched = fetch(`${baseUrl}/Sharing/${id}`, {
-			method: 'PUT',
-			body: formData
-		}).then(async (resp) => {
-			if (!resp.ok) {
-				throw new Error(
-					`Request failed: ${resp.status} - ${await resp.text()}`
-				);
-			}
-	
-			return await resp.json();
-		});
-		return fetched;
+	},
+	async updatePost(id: string, formData: FormData): Promise<void> {
+		const boundary = "----formdata-boundary";// + (Math.random() + 1).toString(36).substring(7);
+		const response = await requestUrl({
+			url: `${baseUrl}/Sharing/${id}`,
+			method: `PUT`,
+			contentType: `multipart/form-data; boundary=${boundary}`,
+			body: await formDataToString(formData)
+		})
+		
+		return response.json;
 	},
 	async deletePost(id: string, formData: FormData): Promise<void> {
-		const removed = fetch(`${baseUrl}/Sharing/${id}`, {
-			method: 'DELETE',
-			body: formData
-		}).then(async (resp) => {
-			if (!resp.ok) {
-				throw new Error(
-					`Request failed: ${resp.status} - ${await resp.text()}`
-				);
-			}
-	
-			return await resp.json();
-		});
-		return removed;
+		const boundary = "----formdata-boundary";// + (Math.random() + 1).toString(36).substring(7);
+		const response = await requestUrl({
+			url: `${baseUrl}/Sharing/${id}`,
+			method: `DELETE`,
+			contentType: `multipart/form-data; boundary=${boundary}`,
+			body: await formDataToString(formData)
+		})
+		return response.json;
 	},
 };
 
