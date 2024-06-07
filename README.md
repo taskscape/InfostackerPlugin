@@ -11,27 +11,21 @@ The Infostacker Note Publish plugin enables users to send notes to a server, edi
 - [Obsidian](https://obsidian.md/) installed on your system.
 - Access to your Obsidian vault.
 
-### How to modify
+## Manual Installation
 
-1. Download the repository of the plugin.
-2. Open Obsidian.
-3. Open or create a vault where you want to install the plugin.
-4. Navigate to Settings and select "Community Plugins".
-5. Enable "Turn on community plugins".
-6. Go to the local path of your Obsidian vault (e.g., TesterVault/.obsidian).
-7. If it doesn't exist, create a folder named "plugins" and enter it.
-8. Copy the downloaded plugin folder and paste it into the "plugins" folder.
-9. Open the folder containing the plugin files using a code editor (Visual Studio Code is recommended).
-10. In `infostacker.ts`, modify the `baseUrl` (line 4) to the URL of the server that will receive requests.
-11. Open the terminal and run `npm install` in the root directory of the plugin (where this readme is located).
-12. After successful installation, run `npm run dev` in the terminal.
-13. Switch back to Obsidian, press `Ctrl+P`, and type "reload".
-14. Select "Reload app without saving".
-15. Open the Settings again and go to the "Community plugins" tab.
-16. In the "Installed plugins" section, "Infostacker Note Publish" should appear. Enable it using the radio button.
+1. **Download the Latest Release**:
+   - Go to the [Releases](https://github.com/taskscape/InfostackerPlugin) page and download the latest version of the plugin.
 
-### Manually installing the plugin
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault VaultFolder/.obsidian/plugins/infostacker-note-publish/.
+2. **Unpack the Plugin**:
+   - Navigate to your Obsidian vault directory.
+   - Open the `.obsidian/plugins` folder.
+   - Create a new folder named `infostacker`.
+   - Unpack the release files into the `infostacker` folder.
+
+3. **Enable the Plugin**:
+   - Open Obsidian and go to `Settings` > `Community plugins`.
+   - Click `Reload plugins` to refresh the plugin list.
+   - Find `Infostacker Note Publish` in the list and toggle it on.
 
 ## Usage
 
