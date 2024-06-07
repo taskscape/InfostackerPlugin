@@ -1,7 +1,7 @@
 import { TFile, TFolder, requestUrl } from 'obsidian';
 import  formDataToString from 'src/helpers';
 
-const baseUrl = 'http://shr.taskscape.com';
+const baseUrl = 'https://shr.taskscape.com';
 
 interface CreateResponse {
 	id: string;
@@ -10,35 +10,35 @@ interface CreateResponse {
 
 const infostackerWrapper = {
 	async createPost(formData: FormData): Promise<CreateResponse> {
-		const boundary = "----formdata-boundary";// + (Math.random() + 1).toString(36).substring(7);
+		const boundary = "formdata-" + Math.random().toString(36).substring(2, 17);
 		const response = await requestUrl({
 			url: `${baseUrl}/Sharing/UploadMarkdownWithFiles`,
 			method: `POST`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
-			body: await formDataToString(formData),
+			body: await formDataToString(formData, boundary),
 			throw: false
 		})
 		return response.json;
 
 	},
 	async updatePost(id: string, formData: FormData): Promise<void> {
-		const boundary = "----formdata-boundary";// + (Math.random() + 1).toString(36).substring(7);
+		const boundary = "formdata-" + Math.random().toString(36).substring(2, 17);
 		const response = await requestUrl({
 			url: `${baseUrl}/Sharing/${id}`,
 			method: `PUT`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
-			body: await formDataToString(formData)
+			body: await formDataToString(formData, boundary)
 		})
 		
 		return response.json;
 	},
 	async deletePost(id: string, formData: FormData): Promise<void> {
-		const boundary = "----formdata-boundary";// + (Math.random() + 1).toString(36).substring(7);
+		const boundary = "formdata-" + Math.random().toString(36).substring(2, 17);
 		const response = await requestUrl({
 			url: `${baseUrl}/Sharing/${id}`,
 			method: `DELETE`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
-			body: await formDataToString(formData)
+			body: await formDataToString(formData, boundary)
 		})
 		return response.json;
 	},

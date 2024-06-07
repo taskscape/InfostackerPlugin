@@ -20,11 +20,11 @@ function isBuffer(buffer) {
   return buffer instanceof Uint8Array || Buffer.isBuffer(buffer);
 }
 
-async function extractBody(object, opts = {}) {
+async function extractBody(object, newBoundary) {
   let source = null;
   let length = 0;
-  const boundary = (opts == null ? void 0 : opts.boundary) ? opts.boundary : `----formdata-boundary`;
-  const rn = new Uint8Array([13, 10]); // \r\n
+  const boundary = newBoundary || `formdata-boundary`;
+  const rn = new Uint8Array([13, 10]); 
   const blobParts = [];
 
   for (const [name, value] of object) {
@@ -109,10 +109,8 @@ async function extractBody(object, opts = {}) {
   };
 }
 
-async function formDataToString(form, opts = {}) {
-  const {
-    body: { stream }
-  } = await extractBody(form, opts);
+async function formDataToString(form, boundary) {
+  const { body: { stream } } = await extractBody(form, boundary);
   return streamToString(stream);
 }
 
