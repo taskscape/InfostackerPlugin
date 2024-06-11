@@ -1,6 +1,6 @@
 {
 	"name": "infostacker-note-publish",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Share your notes with attachments easy!",
 	"main": "main.js",
 	"scripts": {
