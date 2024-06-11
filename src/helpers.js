@@ -40,9 +40,13 @@ async function extractBody(object, newBoundary) {
       if (value instanceof Blob) {
         const buffer = await value.arrayBuffer();
         const base64Data = Buffer.from(buffer).toString('base64');
-        const base64Chunk = new TextEncoder().encode(base64Data);
-        blobParts.push(base64Chunk);
-        length += base64Chunk.byteLength;
+        const chunkSize = 1000000; // 1MB
+        for (let i = 0; i < base64Data.length; i += chunkSize) {
+          const base64Chunk = base64Data.slice(i, i + chunkSize);
+          const encodedChunk = new TextEncoder().encode(base64Chunk);
+          blobParts.push(encodedChunk);
+          length += encodedChunk.byteLength;
+        }
       } else {
         blobParts.push(value);
         length += value.size;
