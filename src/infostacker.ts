@@ -12,7 +12,7 @@ const infostackerWrapper = {
 	async createPost(formData: FormData): Promise<CreateResponse> {
 		const boundary = "formdata-" + Math.random().toString(36).substring(2, 17);
 		const response = await requestUrl({
-			url: `${baseUrl}/Sharing/UploadMarkdownWithFiles`,
+			url: `${baseUrl}/sharing/uploadmarkdownwithfiles`,
 			method: `POST`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
 			body: await formDataToString(formData, boundary),
@@ -24,7 +24,7 @@ const infostackerWrapper = {
 	async updatePost(id: string, formData: FormData): Promise<void> {
 		const boundary = "formdata-" + Math.random().toString(36).substring(2, 17);
 		const response = await requestUrl({
-			url: `${baseUrl}/Sharing/${id}`,
+			url: `${baseUrl}/sharing/${id}`,
 			method: `PUT`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
 			body: await formDataToString(formData, boundary)
@@ -35,7 +35,7 @@ const infostackerWrapper = {
 	async deletePost(id: string, formData: FormData): Promise<void> {
 		const boundary = "formdata-" + Math.random().toString(36).substring(2, 17);
 		const response = await requestUrl({
-			url: `${baseUrl}/Sharing/${id}`,
+			url: `${baseUrl}/sharing/${id}`,
 			method: `DELETE`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
 			body: await formDataToString(formData, boundary)
@@ -134,7 +134,7 @@ export async function createClient(
 				};
 				await saveData(data);
 
-				return `${baseUrl}/Sharing/${resp.id}`;
+				return `${baseUrl}/sharing/${resp.id}`;
 			} catch (e) {
 				console.error(e);
 				throw new Error('Failed to create post');
@@ -146,7 +146,7 @@ export async function createClient(
 				return null;
 			}
 
-			return `${baseUrl}/Sharing/${post.id}`;
+			return `${baseUrl}/sharing/${post.id}`;
 		},
 
 		async updatePost(file: TFile) {
