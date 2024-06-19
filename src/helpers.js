@@ -29,12 +29,12 @@ async function extractBody(object, newBoundary) {
 
   for (const [name, value] of object) {
     if (typeof value === "string") {
-      const header = `--${boundary}\r\nContent-Disposition: form-data; name="${escape(name)}"\r\n\r\n`;
+      const header = `--${boundary}\r\nContent-Disposition: form-data; name="${name}"\r\n\r\n`;
       const chunk = new TextEncoder().encode(header + value + '\r\n');
       blobParts.push(chunk);
       length += chunk.byteLength;
     } else {
-      const header = `--${boundary}\r\nContent-Disposition: form-data; name="${escape(name)}"${value.name ? `; filename="${escape(value.name)}"` : ""}\r\nContent-Type: ${value.type || "application/octet-stream"}\r\n\r\n`;
+      const header = `--${boundary}\r\nContent-Disposition: form-data; name="${name}"${value.name ? `; filename="${value.name}"` : ""}\r\nContent-Type: ${value.type || "application/octet-stream"}\r\n\r\n`;
       const chunk = new TextEncoder().encode(header);
       blobParts.push(chunk);
       if (value instanceof Blob) {
