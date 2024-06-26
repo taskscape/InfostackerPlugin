@@ -23,12 +23,14 @@ const strings = flatten({
 		create: {
 			name: 'Publish to Infostacker',
 			success: 'Note published to Infostacker. URL copied to clipboard.',
-			failure: 'Failed to publish note to Infostacker'
+			failure: 'Failed to publish note to Infostacker',
+			failureFileSizeLimit: 'Failed to publish note to Infostacker: File size exceeds the 25MB limit.'
 		},
 		update: {
 			name: 'Update in Infostacker',
 			success: 'Updated note in Infostacker. It may take a little while before update becomes visible.',
-			failure: 'Failed to update note in Infostacker'
+			failure: 'Failed to update note in Infostacker',
+			failureFileSizeLimit: 'Failed to publish note to Infostacker: File size exceeds the 25MB limit.'
 		},
 		copyUrl: {
 			name: 'Copy Infostacker\'s note URL',
@@ -38,7 +40,7 @@ const strings = flatten({
 		remove: {
 			name: 'Remove from Infostacker',
 			success: 'Note removed from Infostacker',
-			failure: 'Failed to remove note form Infostacker'
+			failure: 'Failed to remove note from Infostacker'
 		},
 		listPosts: {
 			name: 'View published posts',

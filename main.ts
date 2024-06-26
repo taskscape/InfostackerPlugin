@@ -3,6 +3,7 @@ import type { InfostackerClient } from './src/infostacker';
 import { createClient } from './src/infostacker';
 import { getText } from './src/text';
 import { PublishedPostsModal } from './src/modals';
+import { FileSizeLimitError } from 'src/errors';
 
 export default class InfostackerPlugin extends Plugin {
 	InfostackerClient: InfostackerClient;
@@ -118,7 +119,11 @@ export default class InfostackerPlugin extends Plugin {
 			new Notice(getText('actions.create.success'));
 		} catch (e) {
 			console.error(e);
-			new Notice(getText('actions.create.failure'));
+			if (e instanceof FileSizeLimitError) {
+				new Notice(getText('actions.create.failureFileSizeLimit'));
+			} else {
+				new Notice(getText('actions.create.failure'));
+			}
 		}
 	}
 
@@ -128,7 +133,11 @@ export default class InfostackerPlugin extends Plugin {
 			new Notice(getText('actions.update.success'));
 		} catch (e) {
 			console.error(e);
-			new Notice(getText('actions.update.failure'));
+			if (e instanceof FileSizeLimitError) {
+				new Notice(getText('actions.update.failureFileSizeLimit'));
+			} else {
+				new Notice(getText('actions.update.failure'));
+			}
 		}
 	}
 

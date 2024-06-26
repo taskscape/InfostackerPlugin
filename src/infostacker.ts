@@ -1,5 +1,6 @@
 import { TFile, TFolder, requestUrl } from 'obsidian';
 import  formDataToString from 'src/helpers';
+import { FileSizeLimitError } from './errors';
 
 const baseUrl = 'https://shr.taskscape.com';
 
@@ -16,7 +17,6 @@ const infostackerWrapper = {
 			method: `POST`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
 			body: await formDataToString(formData, boundary),
-			throw: false
 		})
 		return response.json;
 
@@ -121,7 +121,6 @@ export async function createClient(
 						formData.append('files', attachmentBlob, attachmentFile.name);
 					} catch (e) {
 						console.error(`Failed to read attachment: ${path}`, e);
-						// Handle the error as per your application's requirements
 					}
 				}
 			}
@@ -137,7 +136,11 @@ export async function createClient(
 				return `${baseUrl}/sharing/${resp.id}`;
 			} catch (e) {
 				console.error(e);
-				throw new Error('Failed to create post');
+				if (e instanceof FileSizeLimitError) {
+					throw new FileSizeLimitError('Failed to create post');
+				} else {
+					throw new Error('Failed to create post');
+				}
 			}
 		},
 		getUrl(file: TFile): string {
@@ -187,7 +190,6 @@ export async function createClient(
 						formData.append('files', attachmentBlob, attachmentFile.name);
 					} catch (e) {
 						console.error(`Failed to read attachment: ${path}`, e);
-						// Handle the error as per your application's requirements
 					}
 				}
 			}
@@ -199,7 +201,11 @@ export async function createClient(
 				);
 			} catch (e) {
 				console.error(e);
-				throw new Error('Failed to update post');
+				if (e instanceof FileSizeLimitError) {
+					throw new FileSizeLimitError('Failed to update post');
+				} else {
+					throw new Error('Failed to update post');
+				}
 			}
 		},
 

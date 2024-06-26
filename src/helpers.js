@@ -1,5 +1,8 @@
 import { isErrored as streamIsErrored } from "stream";
 import { inspect } from "util";
+import { FileSizeLimitError } from "./errors";
+
+const FILE_SIZE_LIMIT = 25 * 1024 * 1024; // 25MB in bytes
 
 async function streamToString(data) {
   const reader = data.getReader();
@@ -39,6 +42,12 @@ async function extractBody(object, newBoundary) {
       blobParts.push(chunk);
       if (value instanceof Blob) {
         const buffer = await value.arrayBuffer();
+        const bufferSize = buffer.byteLength;
+
+        if (bufferSize > FILE_SIZE_LIMIT) {
+          throw new FileSizeLimitError();
+        }
+
         const base64Data = Buffer.from(buffer).toString('base64');
         const chunkSize = 1000000; // 1MB
         for (let i = 0; i < base64Data.length; i += chunkSize) {
@@ -48,6 +57,9 @@ async function extractBody(object, newBoundary) {
           length += encodedChunk.byteLength;
         }
       } else {
+        if (value.size > FILE_SIZE_LIMIT) {
+          throw new FileSizeLimitError();
+        }
         blobParts.push(value);
         length += value.size;
       }
