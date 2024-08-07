@@ -90,7 +90,8 @@ export async function createClient(
 		
 		async createPost(file: TFile) {
 			const title = file.basename;
-			const content = await file.vault.read(file);
+			const fileContent = await file.vault.read(file);
+    		const content = `${title}\n\n${fileContent}`;
 			const attachmentPaths = this.extractAttachmentPaths(content);
 			const formData = new FormData();
 			formData.append('markdown', content);
@@ -155,7 +156,8 @@ export async function createClient(
 		async updatePost(file: TFile) {
 			const post = data.posts[file.path];
     		const title = file.basename;
-    		const content = await file.vault.read(file);
+    		const fileContent = await file.vault.read(file);
+    		const content = `${title}\n\n${fileContent}`;
     		const attachmentPaths = this.extractAttachmentPaths(content);
     		const formData = new FormData();
 			
