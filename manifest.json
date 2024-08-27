@@ -1,9 +1,9 @@
 {
 	"id": "infostacker",
 	"name": "Infostacker Note Publish",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"minAppVersion": "1.5.12",
-	"description": "Share your notes with attachments easy!",
+	"description": "Easily share your notes, images and attachments publicly using private links",
 	"author": "Taskscape LTD, Patryk Nowak, Kacper Pabianiak",
 	"authorUrl": "https://infostacker.com/",
 	"isDesktopOnly": false

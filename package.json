@@ -1,7 +1,7 @@
 {
 	"name": "infostacker-note-publish",
-	"version": "1.0.6",
-	"description": "Share your notes with attachments easy!",
+	"version": "1.0.7",
+	"description": "Easily share your notes, images and attachments publicly using private links",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
