@@ -2,7 +2,7 @@ import { TFile, TFolder, requestUrl } from 'obsidian';
 import  formDataToString from 'src/helpers';
 import { FileSizeLimitError } from './errors';
 
-const baseUrl = 'https://shr.taskscape.com';
+const baseUrl = 'https://shr.infostacker.com';
 
 interface CreateResponse {
 	id: string;
