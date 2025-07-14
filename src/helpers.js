@@ -2,7 +2,7 @@ import { isErrored as streamIsErrored } from "stream";
 import { inspect } from "util";
 import { FileSizeLimitError } from "./errors";
 
-const FILE_SIZE_LIMIT = 25 * 1024 * 1024; // 25MB in bytes
+const FILE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB in bytes
 
 async function streamToString(data) {
   const reader = data.getReader();
