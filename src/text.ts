@@ -24,13 +24,13 @@ const strings = flatten({
 			name: 'Publish to Infostacker',
 			success: 'Note published to Infostacker. URL copied to clipboard.',
 			failure: 'Failed to publish note to Infostacker',
-			failureFileSizeLimit: 'Failed to publish note to Infostacker: File size exceeds the 25MB limit.'
+			failureFileSizeLimit: 'Failed to publish note to Infostacker: File size exceeds the 100MB limit.'
 		},
 		update: {
 			name: 'Update in Infostacker',
 			success: 'Updated note in Infostacker. It may take a little while before update becomes visible.',
 			failure: 'Failed to update note in Infostacker',
-			failureFileSizeLimit: 'Failed to publish note to Infostacker: File size exceeds the 25MB limit.'
+			failureFileSizeLimit: 'Failed to publish note to Infostacker: File size exceeds the 100MB limit.'
 		},
 		copyUrl: {
 			name: 'Copy Infostacker\'s note URL',
