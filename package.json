@@ -1,6 +1,6 @@
 {
 	"name": "infostacker-note-publish",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Easily share your notes, images and attachments publicly using private links",
 	"main": "main.js",
 	"scripts": {
