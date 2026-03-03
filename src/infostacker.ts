@@ -1,5 +1,5 @@
 import { TFile, TFolder, requestUrl } from 'obsidian';
-import  formDataToString from 'src/helpers';
+import  formDataToBuffer from 'src/helpers';
 import { FileSizeLimitError } from './errors';
 
 const baseUrl = 'https://shr.infostacker.com';
@@ -16,7 +16,7 @@ const infostackerWrapper = {
 			url: `${baseUrl}/sharing/uploadmarkdownwithfiles`,
 			method: `POST`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
-			body: await formDataToString(formData, boundary),
+			body: await formDataToBuffer(formData, boundary),
 		})
 		return response.json;
 
@@ -27,7 +27,7 @@ const infostackerWrapper = {
 			url: `${baseUrl}/sharing/${id}`,
 			method: `PUT`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
-			body: await formDataToString(formData, boundary)
+			body: await formDataToBuffer(formData, boundary)
 		})
 		
 		return response.json;
@@ -38,7 +38,7 @@ const infostackerWrapper = {
 			url: `${baseUrl}/sharing/${id}`,
 			method: `DELETE`,
 			contentType: `multipart/form-data; boundary=${boundary}`,
-			body: await formDataToString(formData, boundary)
+			body: await formDataToBuffer(formData, boundary)
 		})
 		return response.json;
 	},

@@ -1,135 +1,46 @@
-import { isErrored as streamIsErrored } from "stream";
-import { inspect } from "util";
 import { FileSizeLimitError } from "./errors";
 
 const FILE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB in bytes
 
-async function streamToString(data) {
-  const reader = data.getReader();
-  const chunks = [];
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    chunks.push(value);
-  }
-  return Buffer.concat(chunks).toString("utf-8");
-}
+async function formDataToBuffer(form, boundary) {
+  const parts = [];
 
-function isErrored(body) {
-  return !!(body && (streamIsErrored ? streamIsErrored(body) : /state: 'errored'/.test(inspect(body))));
-}
-
-function isBuffer(buffer) {
-  return buffer instanceof Uint8Array || Buffer.isBuffer(buffer);
-}
-
-async function extractBody(object, newBoundary) {
-  let source = null;
-  let length = 0;
-  const boundary = newBoundary || `formdata-boundary`;
-  const rn = new Uint8Array([13, 10]); 
-  const blobParts = [];
-
-  for (const [name, value] of object) {
+  for (const [name, value] of form) {
     if (typeof value === "string") {
       const header = `--${boundary}\r\nContent-Disposition: form-data; name="${name}"\r\n\r\n`;
-      const chunk = new TextEncoder().encode(header + value + '\r\n');
-      blobParts.push(chunk);
-      length += chunk.byteLength;
+      parts.push(new TextEncoder().encode(header + value + "\r\n"));
     } else {
-      const header = `--${boundary}\r\nContent-Disposition: form-data; name="${name}"${value.name ? `; filename="${value.name}"` : ""}\r\nContent-Type: ${value.type || "application/octet-stream"}\r\n\r\n`;
-      const chunk = new TextEncoder().encode(header);
-      blobParts.push(chunk);
-      if (value instanceof Blob) {
-        const buffer = await value.arrayBuffer();
-        const bufferSize = buffer.byteLength;
+      const header =
+        `--${boundary}\r\nContent-Disposition: form-data; name="${name}"` +
+        (value.name ? `; filename="${value.name}"` : "") +
+        `\r\nContent-Type: ${value.type || "application/octet-stream"}\r\n\r\n`;
+      parts.push(new TextEncoder().encode(header));
 
-        if (bufferSize > FILE_SIZE_LIMIT) {
-          throw new FileSizeLimitError();
-        }
-
-        const base64Data = Buffer.from(buffer).toString('base64');
-        const chunkSize = 1000000; // 1MB
-        for (let i = 0; i < base64Data.length; i += chunkSize) {
-          const base64Chunk = base64Data.slice(i, i + chunkSize);
-          const encodedChunk = new TextEncoder().encode(base64Chunk);
-          blobParts.push(encodedChunk);
-          length += encodedChunk.byteLength;
-        }
-      } else {
-        if (value.size > FILE_SIZE_LIMIT) {
-          throw new FileSizeLimitError();
-        }
-        blobParts.push(value);
-        length += value.size;
+      const buffer = await value.arrayBuffer();
+      if (buffer.byteLength > FILE_SIZE_LIMIT) {
+        throw new FileSizeLimitError();
       }
-      blobParts.push(rn);
-      length += chunk.byteLength + rn.byteLength;
+      parts.push(new Uint8Array(buffer));
+
+      parts.push(new TextEncoder().encode("\r\n"));
     }
   }
 
-  const finalChunk = new TextEncoder().encode(`--${boundary}--\r\n`);
-  blobParts.push(finalChunk);
-  length += finalChunk.byteLength;
+  parts.push(new TextEncoder().encode(`--${boundary}--\r\n`));
 
-  const action = async function* () {
-    for (const part of blobParts) {
-      if (part instanceof Uint8Array || part instanceof ArrayBuffer) {
-        yield part;
-      } else if (part.stream) {
-        const reader = part.stream().getReader();
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          yield value;
-        }
-      }
-    }
-  };
-
-  const type = `multipart/form-data; boundary=${boundary}`;
-
-  if (typeof source === "string" || isBuffer(source)) {
-    length = Buffer.byteLength(source);
+  let totalLength = 0;
+  for (const part of parts) {
+    totalLength += part.byteLength;
   }
 
-  let iterator;
-  const stream = new ReadableStream({
-    async start() {
-      iterator = action()[Symbol.asyncIterator]();
-    },
-    async pull(controller) {
-      const { value, done } = await iterator.next();
-      if (done) {
-        queueMicrotask(() => {
-          controller.close();
-        });
-      } else if (!isErrored(stream)) {
-        controller.enqueue(new Uint8Array(value));
-      }
-      return controller.desiredSize > 0;
-    },
-    async cancel() {
-      await iterator.return();
-    },
-    type: void 0
-  });
+  const result = new Uint8Array(totalLength);
+  let offset = 0;
+  for (const part of parts) {
+    result.set(part, offset);
+    offset += part.byteLength;
+  }
 
-  return {
-    body: {
-      stream,
-      source,
-      length
-    },
-    type
-  };
+  return result.buffer;
 }
 
-async function formDataToString(form, boundary) {
-  const { body: { stream } } = await extractBody(form, boundary);
-  return streamToString(stream);
-}
-
-export {
-  formDataToString as default
-};
+export { formDataToBuffer as default };
