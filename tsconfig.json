@@ -1,24 +1,13 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "target": "ES2022",
+    "lib": ["DOM", "ES2022"],
+    "strict": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false,
     "baseUrl": ".",
-    "inlineSourceMap": true,
-    "inlineSources": true,
-    "module": "ESNext",
-    "target": "ES2018",
-    "allowJs": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "isolatedModules": true,
-    "lib": [
-      "DOM",
-      "ES5",
-      "ES6",
-      "ES7"
-    ],
-    "outDir": "./dist"
-  },
-  "include": [
-    "**/*.ts"
-  ]
+    "moduleResolution": "node"
+  }
 }
