@@ -27,6 +27,38 @@ The Infostacker Note Publish plugin enables users to send notes to a server, edi
    - Click `Reload plugins` to refresh the plugin list.
    - Find `Infostacker Note Publish` in the list and toggle it on.
 
+## Publishing to the Obsidian Community Plugin Directory
+
+The following process publishes Infostacker Note Publish to the [Obsidian Community plugin directory](https://community.obsidian.md/plugins). It is required only for the initial submission; after the plugin is accepted, Obsidian installs later updates directly from matching GitHub releases.
+
+### Before submitting
+
+- Host the source code in the public [taskscape/InfostackerPlugin](https://github.com/taskscape/InfostackerPlugin) GitHub repository. The repository root must include this `README.md`, `LICENSE`, and `manifest.json`.
+- Review `manifest.json`. Its `id` must be unique, use only lowercase letters and hyphens, and must not contain `obsidian`; the `version` must use the `x.y.z` semantic-version format. Keep `minAppVersion` accurate and leave `isDesktopOnly` as `false` only while the plugin remains mobile-compatible.
+- Build and test the release with `pnpm run build`. This generates the distributable `main.js` file.
+- Ensure the release version is consistent. After updating the version in `package.json`, run `pnpm run version` to copy it to `manifest.json` and add the corresponding minimum-app-version entry to `versions.json`. Commit these files before submission.
+
+### Create a GitHub release
+
+1. Create and push a Git tag that exactly matches the `version` in `manifest.json`, for example `1.1.3`.
+2. Create a GitHub release from that tag and add release notes.
+3. Attach these generated release assets as binary files:
+   - `main.js`
+   - `manifest.json`
+   - `styles.css` (included by this plugin)
+
+Obsidian reads the committed `manifest.json` from the default branch to determine the current version, then downloads the assets from the GitHub release with the matching tag. A release is therefore required even when the repository already contains the built files.
+
+### Submit the initial release
+
+1. Sign in at [community.obsidian.md](https://community.obsidian.md) with an Obsidian account and link the GitHub account that owns the repository.
+2. Select **Plugins** in the sidebar, then **New plugin**.
+3. Enter `https://github.com/taskscape/InfostackerPlugin` as the repository URL.
+4. Review and accept the [Obsidian Developer policies](https://docs.obsidian.md/Developer%20policies), confirm ongoing maintenance, and select **Submit**.
+5. Address any automated review feedback by committing the required changes and publishing a new, incremented GitHub release. The plugin becomes installable from Obsidian only after the review passes.
+
+For future releases, increment the version, update `versions.json` when `minAppVersion` changes, build, and publish a GitHub release with the matching tag and assets. A new directory submission is not needed. See Obsidian’s [official submission guide](https://docs.obsidian.md/Plugins/Releasing/Submit%20your%20plugin) and [manifest reference](https://docs.obsidian.md/Reference/Manifest) for the current requirements.
+
 ## Usage
 
 ### Publishing a Note
